@@ -56,8 +56,8 @@ const defaultAction = [
   {
     id: uid(), badge: "Review", badgeColor: badgePresets.Review,
     title: "Joint Maritime Information Center (JMIC) Advisory Notes",
-    docLabel: "SSA Knowledge Hub – JMIC Advisory Notes",
-    docLink: "https://ssaorgsg.sharepoint.com/sites/SSAKnowledgeHub/Bulletin/Forms/AllItems.aspx",
+    deadline: "",
+    docs: [{ label: "SSA Knowledge Hub – JMIC Advisory Notes", url: "https://ssaorgsg.sharepoint.com/sites/SSAKnowledgeHub/Bulletin/Forms/AllItems.aspx" }],
     tags: "All Members",
     content: "<p><strong>Action Required:</strong></p><p>Members are requested to note that the JMIC Advisory Notes are being uploaded regularly to the attached folder. Members are encouraged to:</p><ul><li>Exercise heightened vigilance,</li><li>Review contingency plans,</li><li>Maintain close communication with charterers and relevant authorities, and</li><li>Comply with all recommended reporting procedures.</li></ul><p><strong>Background:</strong></p><p>The JMIC is a multinational information-sharing and analysis centre that monitors and assesses maritime security developments across key shipping corridors. The Secretariat is sharing the attached advisories to ensure members remain informed of the evolving situation.</p><p>Kindly direct any questions or comments to anis@ssa.org.sg.</p>"
   }
@@ -177,6 +177,17 @@ function tagPills(tagStr) {
     .join("");
 }
 
+function formatDeadline(dateStr) {
+  if (!dateStr) return "";
+  try {
+    const d = new Date(dateStr + "T00:00:00");
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  } catch (e) {
+    return dateStr;
+  }
+}
+
 function buildEventBlock(ev) {
   return `
   <tr data-block="event" data-id="${esc(ev.id)}">
@@ -213,6 +224,9 @@ function buildEventBlock(ev) {
 }
 
 function buildActionBlock(it) {
+  const docs = it.docs || [];
+  const docLinks = docs.map((d) => `<p style="margin:0;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:12px;color:#000000;"><a href="${esc(d.url)}" style="color:#81bce9;text-decoration:underline;">${esc(d.label)}</a></p>`).join("");
+  const deadlineDisplay = formatDeadline(it.deadline);
   return `
   <tr data-block="action" data-id="${esc(it.id)}">
     <td style="border-bottom:1px solid #e8e3da;padding:0;">
@@ -226,7 +240,7 @@ function buildActionBlock(it) {
                 </td>
                 <td valign="top">
                   <p data-f="title" style="margin:0 0 2px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(it.title)}</p>
-                  <p style="margin:0;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:12px;color:#000000;${it.docLink ? "" : "display:none;"}"><a data-f="doc-link" href="${esc(it.docLink)}" style="color:#81bce9;text-decoration:underline;">${esc(it.docLabel)}</a></p>
+                  <div data-f="docs">${docLinks}</div>
                 </td>
               </tr>
             </table>
@@ -235,6 +249,7 @@ function buildActionBlock(it) {
         <tr>
           <td class="pad-sides" style="padding:0 28px 16px 28px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:#000000;background:#faf9f6;border-top:1px solid #e8e3da;">
             <p data-f="tags" style="margin:10px 0 6px;">${tagPills(it.tags)}</p>
+            <p style="margin:0 0 8px;font-weight:700;color:#730303;${it.deadline ? "" : "display:none;"}">Deadline: <span data-f="deadline" data-raw="${esc(it.deadline || "")}">${esc(deadlineDisplay)}</span></p>
             <div data-f="content">${it.content || ""}</div>
           </td>
         </tr>
@@ -380,15 +395,19 @@ function parseHtmlToState(htmlStr) {
   const actionItems = Array.from(doc.querySelectorAll('[data-block="action"]')).map((block) => {
     const q = (f) => block.querySelector(`[data-f="${f}"]`);
     const badgeEl = q("badge");
-    const docA = q("doc-link");
+    const docsEl = q("docs");
     const contentEl = q("content");
+    const deadlineEl = q("deadline");
+    const docs = docsEl
+      ? Array.from(docsEl.querySelectorAll("a")).map((a) => ({ label: a.textContent.trim(), url: a.getAttribute("href") || "" }))
+      : [];
     return {
       id: block.getAttribute("data-id") || uid(),
       badge: badgeEl?.textContent.trim() || "",
       badgeColor: badgeEl?.getAttribute("data-color") || "#281e7e",
       title: q("title")?.textContent.trim() || "",
-      docLabel: docA ? docA.textContent.trim() : "",
-      docLink: docA ? (docA.getAttribute("href") || "") : "",
+      deadline: deadlineEl ? (deadlineEl.getAttribute("data-raw") || "") : "",
+      docs,
       tags: parseTagsContainer(q("tags")),
       content: contentEl ? contentEl.innerHTML.trim() : "",
     };
@@ -438,7 +457,18 @@ export default function App() {
           const data = JSON.parse(res.value);
           if (data.issueRange) setIssueRange(data.issueRange);
           if (data.events) setEvents(data.events);
-          if (data.actionItems) setActionItems(data.actionItems);
+          if (data.actionItems) {
+            // migrate old single docLabel/docLink shape to docs[] + deadline if needed
+            const migrated = data.actionItems.map((it) => {
+              if (it.docs) return { deadline: "", ...it };
+              return {
+                ...it,
+                deadline: it.deadline || "",
+                docs: it.docLink || it.docLabel ? [{ label: it.docLabel || "", url: it.docLink || "" }] : [],
+              };
+            });
+            setActionItems(migrated);
+          }
           if (data.notingItems) setNotingItems(data.notingItems);
           if (typeof data.rawHtmlEdit === "string") setRawHtmlEdit(data.rawHtmlEdit);
         }
@@ -588,17 +618,33 @@ export default function App() {
                     <Field label="Badge Color"><input type="color" className="w-full h-9 border border-gray-300 rounded" value={it.badgeColor} onChange={(e) => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, badgeColor: e.target.value } : x))} /></Field>
                   </div>
                   <Field label="Title"><input className={inputCls} value={it.title} onChange={(e) => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, title: e.target.value } : x))} /></Field>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Field label="Document Link Text"><input className={inputCls} value={it.docLabel} onChange={(e) => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, docLabel: e.target.value } : x))} /></Field>
-                    <Field label="Document Link URL"><input className={inputCls} value={it.docLink} onChange={(e) => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, docLink: e.target.value } : x))} /></Field>
-                  </div>
+                  <Field label="Deadline (optional)">
+                    <div className="flex items-center gap-2">
+                      <input type="date" className={inputCls} value={it.deadline || ""} onChange={(e) => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, deadline: e.target.value } : x))} />
+                      {it.deadline && (
+                        <button type="button" onClick={() => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, deadline: "" } : x))} className="text-xs text-gray-500 hover:text-red-600 whitespace-nowrap">Clear</button>
+                      )}
+                    </div>
+                  </Field>
+                  <Field label="Documents">
+                    <div className="space-y-2">
+                      {(it.docs || []).map((d, di) => (
+                        <div key={di} className="flex gap-2">
+                          <input className={inputCls} placeholder="Link text" value={d.label} onChange={(e) => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, docs: x.docs.map((dd, ddi) => ddi === di ? { ...dd, label: e.target.value } : dd) } : x))} />
+                          <input className={inputCls} placeholder="URL" value={d.url} onChange={(e) => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, docs: x.docs.map((dd, ddi) => ddi === di ? { ...dd, url: e.target.value } : dd) } : x))} />
+                          <button onClick={() => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, docs: x.docs.filter((_, ddi) => ddi !== di) } : x))} className="p-1.5 text-red-500 hover:bg-red-50 rounded"><Trash2 size={15} /></button>
+                        </div>
+                      ))}
+                      <button onClick={() => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, docs: [...(x.docs || []), { label: "", url: "" }] } : x))} className="text-xs text-indigo-700 font-medium flex items-center gap-1"><Plus size={13} /> Add Document</button>
+                    </div>
+                  </Field>
                   <Field label="Tags (comma separated)"><input className={inputCls} value={it.tags} onChange={(e) => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, tags: e.target.value } : x))} /></Field>
                   <Field label="Content">
                     <RichTextEditor value={it.content} onChange={(html) => setActionItems(actionItems.map((x) => x.id === it.id ? { ...x, content: html } : x))} />
                   </Field>
                 </div>
               ))}
-              <button onClick={() => setActionItems([...actionItems, { id: uid(), badge: "Review", badgeColor: badgePresets.Review, title: "New Action Item", docLabel: "", docLink: "", tags: "All Members", content: "" }])} className="flex items-center gap-1.5 text-sm text-indigo-700 font-medium hover:text-indigo-900">
+              <button onClick={() => setActionItems([...actionItems, { id: uid(), badge: "Review", badgeColor: badgePresets.Review, title: "New Action Item", deadline: "", docs: [], tags: "All Members", content: "" }])} className="flex items-center gap-1.5 text-sm text-indigo-700 font-medium hover:text-indigo-900">
                 <Plus size={16} /> Add Action Item
               </button>
             </div>
