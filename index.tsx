@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Plus, Trash2, ChevronUp, ChevronDown, Copy, Check, Save, Eye, Code2, CalendarDays, FileText, Loader2, RotateCcw } from "lucide-react";
-
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
 const STORAGE_KEY = "ssa-digest-data";
 
 const badgePresets = {
@@ -731,3 +733,8 @@ export default function App() {
     </div>
   );
 }
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
