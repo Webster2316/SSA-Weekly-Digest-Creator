@@ -13,6 +13,7 @@ const badgePresets = {
   Info: "#308acf",
 };
 
+
 const uid = () => Math.random().toString(36).slice(2, 10);
 
 const defaultEvents = [
@@ -451,44 +452,54 @@ export default function App() {
   const [rawHtmlEdit, setRawHtmlEdit] = useState(null);
   const [syncMessage, setSyncMessage] = useState(null);
 
+  // ---- LOAD on mount: pulls the last-saved digest from the Neon DB via /api/load-digest ----
   useEffect(() => {
     (async () => {
       try {
-        const res = await window.storage.get(STORAGE_KEY, true);
-        if (res && res.value) {
-          const data = JSON.parse(res.value);
-          if (data.issueRange) setIssueRange(data.issueRange);
-          if (data.events) setEvents(data.events);
-          if (data.actionItems) {
-            // migrate old single docLabel/docLink shape to docs[] + deadline if needed
-            const migrated = data.actionItems.map((it) => {
-              if (it.docs) return { deadline: "", ...it };
-              return {
-                ...it,
-                deadline: it.deadline || "",
-                docs: it.docLink || it.docLabel ? [{ label: it.docLabel || "", url: it.docLink || "" }] : [],
-              };
-            });
-            setActionItems(migrated);
+        const res = await fetch("/api/load-digest");
+        if (res.ok) {
+          const data = await res.json();
+          if (data) {
+            if (data.issueRange) setIssueRange(data.issueRange);
+            if (data.events) setEvents(data.events);
+            if (data.actionItems) {
+              // migrate old single docLabel/docLink shape to docs[] + deadline if needed
+              const migrated = data.actionItems.map((it) => {
+                if (it.docs) return { deadline: "", ...it };
+                return {
+                  ...it,
+                  deadline: it.deadline || "",
+                  docs: it.docLink || it.docLabel ? [{ label: it.docLabel || "", url: it.docLink || "" }] : [],
+                };
+              });
+              setActionItems(migrated);
+            }
+            if (data.notingItems) setNotingItems(data.notingItems);
+            if (typeof data.rawHtmlEdit === "string") setRawHtmlEdit(data.rawHtmlEdit);
           }
-          if (data.notingItems) setNotingItems(data.notingItems);
-          if (typeof data.rawHtmlEdit === "string") setRawHtmlEdit(data.rawHtmlEdit);
         }
       } catch (e) {
-        // no saved data yet — keep presets
+        // no saved data yet, or API not reachable — keep presets
+        console.error("Failed to load saved digest:", e);
       }
       setLoaded(true);
     })();
   }, []);
 
+  // ---- SAVE on change: debounced write to the Neon DB via /api/save-digest ----
   useEffect(() => {
     if (!loaded) return;
     setSaveStatus("saving");
     const t = setTimeout(async () => {
       try {
-        await window.storage.set(STORAGE_KEY, JSON.stringify({ issueRange, events, actionItems, notingItems, rawHtmlEdit }), true);
-        setSaveStatus("saved");
+        const res = await fetch("/api/save-digest", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ issueRange, events, actionItems, notingItems, rawHtmlEdit }),
+        });
+        setSaveStatus(res.ok ? "saved" : "error");
       } catch (e) {
+        console.error("Failed to save digest:", e);
         setSaveStatus("error");
       }
     }, 700);
