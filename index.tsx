@@ -176,7 +176,7 @@ function esc(s = "") {
 
 function tagPills(tagStr) {
   return (tagStr || "").split(",").map((t) => t.trim()).filter(Boolean)
-    .map((t) => `<span style="display:inline-block;background:#f4f1ec;border:1px solid #e8e3da;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#000000;padding:2px 8px;margin-right:6px;">${esc(t)}</span>`)
+    .map((t) => `<span style="display:inline-block;max-width:100%;white-space:normal;word-break:break-word;background:#f4f1ec;border:1px solid #e8e3da;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#000000;padding:2px 8px;margin-right:6px;">${esc(t)}</span>`)
     .join("");
 }
 
@@ -304,6 +304,7 @@ function buildFullHTML({ issueRange, events, actionItems, notingItems }) {
 body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
 table,td{mso-table-lspace:0pt;mso-table-rspace:0pt;}
 img{-ms-interpolation-mode:bicubic;border:0;display:block;}
+p,span,div,a,td,li{word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;}
 body{margin:0!important;padding:0!important;background-color:#f4f1ec;}
 @media only screen and (max-width:620px){
 .email-container{width:100%!important;max-width:100%!important;}
@@ -323,7 +324,7 @@ body{margin:0!important;padding:0!important;background-color:#f4f1ec;}
 <tr><td align="center" style="padding:32px 20px;">
 <table class="email-container" width="680" cellpadding="0" cellspacing="0" border="0" role="presentation" align="center" style="max-width:680px;width:100%;background:#ffffff;border:1px solid #e8e3da;">
 <tr><td style="padding:0;font-size:0;line-height:0;">
-<img class="header-img" src="https://raw.githubusercontent.com/Webster2316/Weekly_Digest_SSA/refs/heads/main/Banner.png" width="680" alt="SSA Weekly Digest" style="display:block;width:100%;max-width:680px;border:0;height:auto;">
+<img class="header-img" src="https://raw.githubusercontent.com/Webster2316/Weekly_Digest_SSA/refs/heads/main/Banner.png?v=2" width="680" alt="SSA Weekly Digest" style="display:block;width:100%;max-width:680px;border:0;height:auto;">
 </td></tr>
 <tr><td data-f="issue-range" style="background-color:#1b76bc;padding:12px 24px;text-align:right;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;">${esc(issueRange)}</td></tr>
 
