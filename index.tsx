@@ -239,7 +239,7 @@ function buildActionBlock(it) {
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
               <tr>
                 <td class="badge-cell" valign="top" style="white-space:nowrap;width:1%;padding-right:14px;">
-                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="white-space:normal;word-wrap:break-word;word-break:break-word;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;padding:3px 8px;line-height:2.2;">${esc(it.badge)}</span>
+                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="white-space:nowrap;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;padding:3px 8px;">${esc(it.badge)}</span>
                 </td>
                 <td valign="top">
                   <p data-f="title" style="margin:0 0 2px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(it.title)}</p>
@@ -272,7 +272,7 @@ function buildNotingBlock(it) {
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
               <tr>
                 <td class="badge-cell" valign="top" style="white-space:nowrap;width:1%;padding-right:14px;">
-                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="white-space:normal;word-wrap:break-word;word-break:break-word;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#f9f6ff;padding:3px 8px;line-height:2.2;">${esc(it.badge)}</span>
+                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="white-space:nowrap;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#f9f6ff;padding:3px 8px;">${esc(it.badge)}</span>
                 </td>
                 <td valign="top">
                   <p data-f="title" style="margin:0 0 2px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(it.title)}</p>
