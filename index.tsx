@@ -176,7 +176,7 @@ function esc(s = "") {
 
 function tagPills(tagStr) {
   return (tagStr || "").split(",").map((t) => t.trim()).filter(Boolean)
-    .map((t) => `<span style="display:inline-block;max-width:100%;white-space:normal;word-break:break-word;background:#f4f1ec;border:1px solid #e8e3da;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#000000;padding:2px 8px;margin-right:6px;">${esc(t)}</span>`)
+    .map((t) => `<span style="white-space:normal;word-wrap:break-word;word-break:break-word;background:#f4f1ec;border:1px solid #e8e3da;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#000000;padding:2px 8px;margin-right:6px;line-height:2.2;">${esc(t)}</span>`)
     .join("");
 }
 
@@ -214,7 +214,7 @@ function buildEventBlock(ev) {
           </td>
         </tr>
         <tr>
-          <td class="body-indented pad-sides" style="padding:0 28px 16px 96px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:#000000;border-top:1px solid #e8e3da;">
+          <td class="body-indented pad-sides" style="padding:0 28px 16px 96px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:#000000;border-top:1px solid #e8e3da;word-wrap:break-word;word-break:break-word;">
             <p data-f="tags" style="margin:10px 0 8px;">${tagPills(ev.tags)}</p>
             <p style="margin:0 0 6px;${ev.venue ? "" : "display:none;"}"><strong>Venue:</strong> <span data-f="venue">${esc(ev.venue)}</span></p>
             <p style="margin:0 0 6px;${ev.regLink ? "" : "display:none;"}">Registration: <a data-f="reg-link" href="${esc(ev.regLink)}" style="color:#81bce9;text-decoration:underline;">${esc(ev.regText || "Register here")}</a></p>
@@ -239,7 +239,7 @@ function buildActionBlock(it) {
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
               <tr>
                 <td class="badge-cell" valign="top" style="white-space:nowrap;width:1%;padding-right:14px;">
-                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="display:inline-block;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;padding:3px 8px;">${esc(it.badge)}</span>
+                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="white-space:normal;word-wrap:break-word;word-break:break-word;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;padding:3px 8px;line-height:2.2;">${esc(it.badge)}</span>
                 </td>
                 <td valign="top">
                   <p data-f="title" style="margin:0 0 2px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(it.title)}</p>
@@ -250,7 +250,7 @@ function buildActionBlock(it) {
           </td>
         </tr>
         <tr>
-          <td class="pad-sides" style="padding:0 28px 16px 28px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:#000000;background:#faf9f6;border-top:1px solid #e8e3da;">
+          <td class="pad-sides" style="padding:0 28px 16px 28px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:#000000;background:#faf9f6;border-top:1px solid #e8e3da;word-wrap:break-word;word-break:break-word;">
             <p data-f="tags" style="margin:10px 0 6px;">${tagPills(it.tags)}</p>
             <p style="margin:0 0 8px;font-weight:700;color:#730303;${it.deadline ? "" : "display:none;"}">Deadline: <span data-f="deadline" data-raw="${esc(it.deadline || "")}">${esc(deadlineDisplay)}</span></p>
             <div data-f="content">${it.content || ""}</div>
@@ -272,7 +272,7 @@ function buildNotingBlock(it) {
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
               <tr>
                 <td class="badge-cell" valign="top" style="white-space:nowrap;width:1%;padding-right:14px;">
-                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="display:inline-block;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#f9f6ff;padding:3px 8px;">${esc(it.badge)}</span>
+                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="white-space:normal;word-wrap:break-word;word-break:break-word;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#f9f6ff;padding:3px 8px;line-height:2.2;">${esc(it.badge)}</span>
                 </td>
                 <td valign="top">
                   <p data-f="title" style="margin:0 0 2px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(it.title)}</p>
@@ -283,7 +283,7 @@ function buildNotingBlock(it) {
           </td>
         </tr>
         <tr>
-          <td class="pad-sides" style="padding:0 28px 16px 28px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:#000000;background:#faf9f6;border-top:1px solid #e8e3da;">
+          <td class="pad-sides" style="padding:0 28px 16px 28px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:#000000;background:#faf9f6;border-top:1px solid #e8e3da;word-wrap:break-word;word-break:break-word;">
             <p data-f="tags" style="margin:10px 0 8px;">${tagPills(it.tags)}</p>
             <div data-f="content">${it.content || ""}</div>
           </td>
