@@ -176,7 +176,7 @@ function esc(s = "") {
 
 function tagPills(tagStr) {
   return (tagStr || "").split(",").map((t) => t.trim()).filter(Boolean)
-    .map((t) => `<span style="display:inline-block;background:#f4f1ec;border:1px solid #e8e3da;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:justify;color:#000000;padding:2px 8px;margin-right:6px;">${esc(t)}</span>`)
+    .map((t) => `<span style="display:inline-block;background:#f4f1ec;border:1px solid #e8e3da;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#000000;padding:2px 8px;margin-right:6px;">${esc(t)}</span>`)
     .join("");
 }
 
@@ -201,24 +201,24 @@ function buildEventBlock(ev) {
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
               <tr>
                 <td class="event-date-cell" width="52" valign="top" style="background-color:#281e7e;text-align:center;padding:6px 4px;width:52px;">
-                  <span data-f="day" style="display:block;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;font-weight:700;color:#ffffff;line-height:1;">${esc(ev.day)}</span>
-                  <span data-f="month" style="display:block;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#f9f6ff;margin-top:3px;">${esc(ev.month)}</span>
+                  <span data-f="day" style="display:block;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:20px;font-weight:700;color:#ffffff;line-height:1;">${esc(ev.day)}</span>
+                  <span data-f="month" style="display:block;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#f9f6ff;margin-top:3px;">${esc(ev.month)}</span>
                 </td>
                 <td class="event-spacer-cell" width="16">&nbsp;</td>
                 <td class="event-title-cell" valign="top">
-                  <p data-f="title" style="margin:0 0 3px;text-align:justify;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(ev.title)}</p>
-                  <p style="margin:0;text-align:justify;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;color:#000000;letter-spacing:0.5px;"><span data-f="location">${esc(ev.location)}</span> &nbsp;&#183;&nbsp; <span data-f="time">${esc(ev.timeText)}</span></p>
+                  <p data-f="title" style="margin:0 0 3px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:15px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(ev.title)}</p>
+                  <p style="margin:0;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:12px;color:#000000;letter-spacing:0.5px;"><span data-f="location">${esc(ev.location)}</span> &nbsp;&#183;&nbsp; <span data-f="time">${esc(ev.timeText)}</span></p>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
         <tr>
-          <td class="body-indented pad-sides" style="padding:0 28px 16px 96px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;line-height:1.7;color:#000000;text-align:justify;border-top:1px solid #e8e3da;">
+          <td class="body-indented pad-sides" style="padding:0 28px 16px 96px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:#000000;border-top:1px solid #e8e3da;">
             <p data-f="tags" style="margin:10px 0 8px;">${tagPills(ev.tags)}</p>
-            <p style="margin:0 0 6px;text-align:justify;${ev.venue ? "" : "display:none;"}"><strong>Venue:</strong> <span data-f="venue">${esc(ev.venue)}</span></p>
-            <p style="margin:0 0 6px;text-align:justify;${ev.regLink ? "" : "display:none;"}">Registration: <a data-f="reg-link" href="${esc(ev.regLink)}" style="color:#81bce9;text-decoration:underline;">${esc(ev.regText || "Register here")}</a></p>
-            <p data-f="description" style="margin:0;text-align:justify;${ev.description ? "" : "display:none;"}">${esc(ev.description)}</p>
+            <p style="margin:0 0 6px;${ev.venue ? "" : "display:none;"}"><strong>Venue:</strong> <span data-f="venue">${esc(ev.venue)}</span></p>
+            <p style="margin:0 0 6px;${ev.regLink ? "" : "display:none;"}">Registration: <a data-f="reg-link" href="${esc(ev.regLink)}" style="color:#81bce9;text-decoration:underline;">${esc(ev.regText || "Register here")}</a></p>
+            <p data-f="description" style="margin:0;${ev.description ? "" : "display:none;"}">${esc(ev.description)}</p>
           </td>
         </tr>
       </table>
@@ -228,7 +228,7 @@ function buildEventBlock(ev) {
 
 function buildActionBlock(it) {
   const docs = it.docs || [];
-  const docLinks = docs.map((d) => `<p style="margin:0;text-align:justify;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;color:#000000;"><a href="${esc(d.url)}" style="color:#81bce9;text-decoration:underline;">${esc(d.label)}</a></p>`).join("");
+  const docLinks = docs.map((d) => `<p style="margin:0;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:12px;color:#000000;"><a href="${esc(d.url)}" style="color:#81bce9;text-decoration:underline;">${esc(d.label)}</a></p>`).join("");
   const deadlineDisplay = formatDeadline(it.deadline);
   return `
   <tr data-block="action" data-id="${esc(it.id)}">
@@ -239,10 +239,10 @@ function buildActionBlock(it) {
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
               <tr>
                 <td class="badge-cell" valign="top" style="white-space:nowrap;width:1%;padding-right:14px;">
-                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="display:inline-block;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;padding:3px 8px;">${esc(it.badge)}</span>
+                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="display:inline-block;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;padding:3px 8px;">${esc(it.badge)}</span>
                 </td>
                 <td valign="top">
-                  <p data-f="title" style="margin:0 0 2px;text-align:justify;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(it.title)}</p>
+                  <p data-f="title" style="margin:0 0 2px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(it.title)}</p>
                   <div data-f="docs">${docLinks}</div>
                 </td>
               </tr>
@@ -250,9 +250,9 @@ function buildActionBlock(it) {
           </td>
         </tr>
         <tr>
-          <td class="pad-sides" style="padding:0 28px 16px 28px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;line-height:1.7;color:#000000;text-align:justify;background:#faf9f6;border-top:1px solid #e8e3da;">
+          <td class="pad-sides" style="padding:0 28px 16px 28px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:#000000;background:#faf9f6;border-top:1px solid #e8e3da;">
             <p data-f="tags" style="margin:10px 0 6px;">${tagPills(it.tags)}</p>
-            <p style="margin:0 0 8px;text-align:justify;font-weight:700;color:#730303;${it.deadline ? "" : "display:none;"}">Deadline: <span data-f="deadline" data-raw="${esc(it.deadline || "")}">${esc(deadlineDisplay)}</span></p>
+            <p style="margin:0 0 8px;font-weight:700;color:#730303;${it.deadline ? "" : "display:none;"}">Deadline: <span data-f="deadline" data-raw="${esc(it.deadline || "")}">${esc(deadlineDisplay)}</span></p>
             <div data-f="content">${it.content || ""}</div>
           </td>
         </tr>
@@ -262,7 +262,7 @@ function buildActionBlock(it) {
 }
 
 function buildNotingBlock(it) {
-  const docLinks = (it.docs || []).map((d) => `<p style="margin:0;text-align:justify;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;color:#000000;"><a href="${esc(d.url)}" style="color:#81bce9;text-decoration:underline;">${esc(d.label)}</a></p>`).join("");
+  const docLinks = (it.docs || []).map((d) => `<p style="margin:0;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:12px;color:#000000;"><a href="${esc(d.url)}" style="color:#81bce9;text-decoration:underline;">${esc(d.label)}</a></p>`).join("");
   return `
   <tr data-block="noting" data-id="${esc(it.id)}">
     <td style="border-bottom:1px solid #e8e3da;padding:0;">
@@ -272,10 +272,10 @@ function buildNotingBlock(it) {
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
               <tr>
                 <td class="badge-cell" valign="top" style="white-space:nowrap;width:1%;padding-right:14px;">
-                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="display:inline-block;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#f9f6ff;padding:3px 8px;">${esc(it.badge)}</span>
+                  <span data-f="badge" data-color="${esc(it.badgeColor)}" style="display:inline-block;background:${it.badgeColor};font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#f9f6ff;padding:3px 8px;">${esc(it.badge)}</span>
                 </td>
                 <td valign="top">
-                  <p data-f="title" style="margin:0 0 2px;text-align:justify;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(it.title)}</p>
+                  <p data-f="title" style="margin:0 0 2px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;font-weight:700;color:#281e7e;line-height:1.3;">${esc(it.title)}</p>
                   <div data-f="docs">${docLinks}</div>
                 </td>
               </tr>
@@ -283,7 +283,7 @@ function buildNotingBlock(it) {
           </td>
         </tr>
         <tr>
-          <td class="pad-sides" style="padding:0 28px 16px 28px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;line-height:1.7;color:#000000;text-align:justify;background:#faf9f6;border-top:1px solid #e8e3da;">
+          <td class="pad-sides" style="padding:0 28px 16px 28px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:#000000;background:#faf9f6;border-top:1px solid #e8e3da;">
             <p data-f="tags" style="margin:10px 0 8px;">${tagPills(it.tags)}</p>
             <div data-f="content">${it.content || ""}</div>
           </td>
@@ -318,28 +318,28 @@ body{margin:0!important;padding:0!important;background-color:#f4f1ec;}
 }
 </style>
 </head>
-<body style="margin:0;padding:0;background-color:#f4f1ec;font-family:'Yu Gothic UI',Arial,sans-serif;color:#000000;text-align:justify;font-size:13px;line-height:1.6;">
+<body style="margin:0;padding:0;background-color:#f4f1ec;font-family:'Yu Gothic UI',Arial,sans-serif;color:#000000;font-size:15px;line-height:1.6;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#f4f1ec;">
 <tr><td align="center" style="padding:32px 20px;">
 <table class="email-container" width="680" cellpadding="0" cellspacing="0" border="0" role="presentation" align="center" style="max-width:680px;width:100%;background:#ffffff;border:1px solid #e8e3da;">
 <tr><td style="padding:0;font-size:0;line-height:0;">
-<img class="header-img" src="https://raw.githubusercontent.com/Webster2316/Weekly_Digest_SSA/refs/heads/main/Banner.png?v=2" width="680" alt="SSA Weekly Digest" style="display:block;width:100%;max-width:680px;border:0;height:auto;">
+<img class="header-img" src="https://raw.githubusercontent.com/Webster2316/Weekly_Digest_SSA/refs/heads/main/Banner.png" width="680" alt="SSA Weekly Digest" style="display:block;width:100%;max-width:680px;border:0;height:auto;">
 </td></tr>
-<tr><td data-f="issue-range" style="background-color:#1b76bc;padding:12px 24px;text-align:right;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;">${esc(issueRange)}</td></tr>
+<tr><td data-f="issue-range" style="background-color:#1b76bc;padding:12px 24px;text-align:right;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;">${esc(issueRange)}</td></tr>
 
 <tr><td style="background-color:#281e7e;padding:14px 28px;">
-<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td align="center" style="font-family:'Yu Gothic UI',Arial,sans-serif;font-size:19px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#f9f6ff;">Upcoming Events for the Next Three Months</td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td align="center" style="font-family:'Yu Gothic UI',Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#f9f6ff;">Upcoming Events for the Next Three Months</td></tr></table>
 </td></tr>
 ${events.map(buildEventBlock).join("")}
 
 <tr><td style="background-color:#281e7e;padding:14px 28px;">
-<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td align="center" style="font-family:'Yu Gothic UI',Arial,sans-serif;font-size:19px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#f9f6ff;">Papers, Circulars &amp; Surveys</td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td align="center" style="font-family:'Yu Gothic UI',Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#f9f6ff;">Papers, Circulars &amp; Surveys</td></tr></table>
 </td></tr>
 
 <tr><td style="background-color:#281e7e;padding:12px 28px;border-bottom:1px solid #e8e3da;">
 <table cellpadding="0" cellspacing="0" border="0" role="presentation"><tr>
 <td width="8" height="8" style="background-color:#308acf;width:8px;height:8px;font-size:1px;line-height:1px;">&nbsp;</td>
-<td style="padding-left:10px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#f9f6ff;">For Action</td>
+<td style="padding-left:10px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#f9f6ff;">For Action</td>
 </tr></table>
 </td></tr>
 ${actionItems.map(buildActionBlock).join("")}
@@ -347,14 +347,14 @@ ${actionItems.map(buildActionBlock).join("")}
 <tr><td style="background-color:#281e7e;padding:12px 28px;border-top:1px solid #e8e3da;border-bottom:1px solid #e8e3da;">
 <table cellpadding="0" cellspacing="0" border="0" role="presentation"><tr>
 <td width="8" height="8" style="background-color:#931bb1;width:8px;height:8px;font-size:1px;line-height:1px;">&nbsp;</td>
-<td style="padding-left:10px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#f9f6ff;">For Noting</td>
+<td style="padding-left:10px;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#f9f6ff;">For Noting</td>
 </tr></table>
 </td></tr>
 ${notingItems.map(buildNotingBlock).join("")}
 
 <tr><td class="footer-cell" style="background-color:#281e7e;padding:24px 28px;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td align="center">
-<p style="margin:0;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:13px;color:#ffffff;text-align:justify;line-height:1.7;">You are receiving this Weekly Digest because you are a Tier 1 member of an SSA Committee. This Weekly Digest is circulated to keep committee members informed of developments and matters under consideration across SSA Committees. As this distribution is tied to committee membership, members who wish to discontinue receiving the Digest will need to resign from their committee appointment by contacting <a href="mailto:ssa.admin@ssa.org.sg" style="color:#81bce9;text-decoration:none;">ssa.admin@ssa.org.sg</a>.</p>
+<p style="margin:0;font-family:'Yu Gothic UI',Arial,sans-serif;font-size:12px;color:#ffffff;line-height:1.7;">You are receiving this Weekly Digest because you are a Tier 1 member of an SSA Committee. This Weekly Digest is circulated to keep committee members informed of developments and matters under consideration across SSA Committees. As this distribution is tied to committee membership, members who wish to discontinue receiving the Digest will need to resign from their committee appointment by contacting <a href="mailto:ssa.admin@ssa.org.sg" style="color:#81bce9;text-decoration:none;">ssa.admin@ssa.org.sg</a>.</p>
 </td></tr></table>
 </td></tr>
 </table>
